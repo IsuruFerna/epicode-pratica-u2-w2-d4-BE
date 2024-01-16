@@ -17,14 +17,12 @@ public class BlogPost {
     private String title;
     private String cover;
     private String content;
-    private double readTime;
+    private int readTime;
 
-    public BlogPost(String category, String title, String content, double readTime) {
-        Random rndm = new Random();
-        this.id = rndm.nextLong(0, 2000);
+    public BlogPost(String category, String title, String content, int readTime) {
         this.category = category;
         this.title = title;
-        this.cover = "https://picsum.photos/200/300";
         this.content = content;
+        this.readTime = readTime;
     }
 }
