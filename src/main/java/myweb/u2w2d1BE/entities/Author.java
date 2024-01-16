@@ -18,13 +18,10 @@ public class Author {
     private LocalDate birthDay;
     private String avatar;
 
-    public Author(String firstName, String lastName, String email, String birthDay) {
-        Random rndm = new Random();
-        this.id = rndm.nextLong(0, 2000);
+    public Author(String firstName, String lastName, String email, String birthDay, String avatar) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.birthDay = LocalDate.parse(birthDay);
-        this.avatar = "https://ui-avatars.com/api/?name=" + firstName + lastName;
     }
 }
