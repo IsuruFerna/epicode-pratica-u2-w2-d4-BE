@@ -1,10 +1,7 @@
 package myweb.u2w2d1BE.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,9 +12,11 @@ import java.util.Random;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 public class Author {
     @Id
     @GeneratedValue
+//    @Setter(AccessLevel.NONE)
     private long id;
     private String firstName;
     private String lastName;
@@ -25,6 +24,7 @@ public class Author {
     private LocalDate birthDay;
     private String avatar;
 
+    @NonNull
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     List<BlogPost> blogPostList;
 

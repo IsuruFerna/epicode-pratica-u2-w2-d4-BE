@@ -23,6 +23,7 @@ public class BlogPost {
     private String content;
     private int readTime;
 
+    @NonNull
     @ManyToOne(cascade = CascadeType.ALL)
     private Author author;
 
