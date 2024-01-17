@@ -30,42 +30,20 @@ public class AuthorService {
 
     public Author findById(Long id) {
         return authorDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
-//        Author found = null;
-//        for(Author author: this.authors) {
-//            if(author.getId() == id) {
-//                found = author;
-//            }
-//        }
-//        if (found == null)
-//            throw new NotFoundException(id);
-//        return found;
-
     }
 
     public void findByIdAndDelete(Long id) {
-        Iterator<Author> iterator = this.authors.iterator();
-        while (iterator.hasNext()) {
-            Author current = iterator.next();
-            if(current.getId() == id) {
-                iterator.remove();
-            }
-        }
+        Author found = this.findById(id);
+        authorDAO.delete(found);
     }
 
     public Author findByIdAndUpdate(Long id, Author body) {
-        Author found = null;
-        for (Author post: this.authors) {
-            if(post.getId() == id) {
-                found = post;
-                found.setId(id);
-                found.setEmail(body.getEmail());
-                found.setBirthDay(body.getBirthDay());
-                found.setFirstName(body.getFirstName());
-                found.setLastName(body.getLastName());
-            }
-        }
-        if(found == null)
-            throw new NotFoundException(id);
-        return found;
+        Author found = this.findById(id);
+        found.setEmail(body.getEmail());
+        found.setBirthDay(body.getBirthDay());
+        found.setFirstName(body.getFirstName());
+        found.setLastName(body.getLastName());
+        found.setAvatar(body.getAvatar());
+        return authorDAO.save(found);
     }
 }

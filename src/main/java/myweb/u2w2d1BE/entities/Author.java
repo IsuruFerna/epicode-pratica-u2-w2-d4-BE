@@ -10,7 +10,6 @@ import java.util.Random;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Author {
@@ -33,5 +32,18 @@ public class Author {
         this.lastName = lastName;
         this.email = email;
         this.birthDay = LocalDate.parse(birthDay);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Author{");
+        sb.append("id=").append(id);
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", birthDay=").append(birthDay);
+        sb.append(", avatar='").append(avatar).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
