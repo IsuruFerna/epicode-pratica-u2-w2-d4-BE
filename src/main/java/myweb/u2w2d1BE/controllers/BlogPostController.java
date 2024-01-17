@@ -4,6 +4,7 @@ import myweb.u2w2d1BE.entities.BlogPost;
 import myweb.u2w2d1BE.payload.NewBlogPostPayload;
 import myweb.u2w2d1BE.services.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +17,10 @@ public class BlogPostController {
     BlogPostService blogPostService;
 
     @GetMapping
-    public List<BlogPost> getBlogPosts() {
-        return blogPostService.getBlogPosts();
+    public Page<BlogPost> getBlogPosts(@RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "id") String orderBy) {
+        return blogPostService.getBlogPosts(page, size, orderBy);
     }
 
     @PostMapping

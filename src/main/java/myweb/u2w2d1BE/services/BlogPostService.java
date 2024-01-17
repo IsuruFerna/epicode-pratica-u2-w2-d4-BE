@@ -7,6 +7,10 @@ import myweb.u2w2d1BE.exceptions.NotFoundException;
 import myweb.u2w2d1BE.payload.NewBlogPostPayload;
 import myweb.u2w2d1BE.repositories.BlogPostDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownServiceException;
@@ -24,10 +28,10 @@ public class BlogPostService {
     @Autowired
     private AuthorService authorService;
 
-    private List<BlogPost> blogPosts = new ArrayList<>();
-
-    public List<BlogPost> getBlogPosts() {
-        return blogPostDAO.findAll();
+    public Page<BlogPost> getBlogPosts(int page, int size, String orderBy) {
+        if(size >= 100) size = 100;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+        return blogPostDAO.findAll(pageable);
     }
 
     public BlogPost save(NewBlogPostPayload body) {
