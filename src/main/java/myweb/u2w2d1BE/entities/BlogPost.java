@@ -1,5 +1,7 @@
 package myweb.u2w2d1BE.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,18 +13,22 @@ import java.util.Stack;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BlogPost {
     @Id
     @GeneratedValue
-//    @Setter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private long id;
     private String category;
     private String title;
     private String cover;
+    @Lob
     private String content;
     private int readTime;
 
-    @NonNull
+//    @NonNull
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     private Author author;
 
@@ -31,6 +37,14 @@ public class BlogPost {
         this.title = title;
         this.content = content;
         this.readTime = readTime;
+    }
+
+    public BlogPost(String category, String title, String content, int readTime, Author author) {
+        this.category = category;
+        this.title = title;
+        this.content = content;
+        this.readTime = readTime;
+        this.author = author;
     }
 
     @Override

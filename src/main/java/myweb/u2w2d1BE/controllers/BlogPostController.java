@@ -1,6 +1,7 @@
 package myweb.u2w2d1BE.controllers;
 
 import myweb.u2w2d1BE.entities.BlogPost;
+import myweb.u2w2d1BE.payload.NewBlogPostPayload;
 import myweb.u2w2d1BE.services.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class BlogPostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BlogPost saveBlogPost(@RequestBody BlogPost body) {
+    public BlogPost saveBlogPost(@RequestBody NewBlogPostPayload body) {
         return blogPostService.save(body);
     }
 
@@ -31,7 +32,7 @@ public class BlogPostController {
     }
 
     @PutMapping("/{id}")
-    public BlogPost findByIdAndUpdate(@PathVariable Long id, @RequestBody BlogPost body) {
+    public BlogPost findByIdAndUpdate(@PathVariable Long id, @RequestBody NewBlogPostPayload body) {
         return this.blogPostService.findByIdAndUpdate(id, body);
     }
 

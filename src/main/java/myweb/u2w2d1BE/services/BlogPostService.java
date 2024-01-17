@@ -1,7 +1,12 @@
 package myweb.u2w2d1BE.services;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import myweb.u2w2d1BE.entities.Author;
 import myweb.u2w2d1BE.entities.BlogPost;
 import myweb.u2w2d1BE.exceptions.NotFoundException;
+import myweb.u2w2d1BE.payload.NewBlogPostPayload;
+import myweb.u2w2d1BE.repositories.BlogPostDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownServiceException;
@@ -12,58 +17,55 @@ import java.util.Random;
 
 @Service
 public class BlogPostService {
+
+    @Autowired
+    private BlogPostDAO blogPostDAO;
+
+    @Autowired
+    private AuthorService authorService;
+
     private List<BlogPost> blogPosts = new ArrayList<>();
 
     public List<BlogPost> getBlogPosts() {
-        return this.blogPosts;
+        return blogPostDAO.findAll();
     }
 
-    public BlogPost save(BlogPost body) {
-        Random rndm = new Random();
-        body.setId(rndm.nextLong(0, 2000));
-        body.setCover("https://picsum.photos/200/300");
-        this.blogPosts.add(body);
-        return body;
+    public BlogPost save(NewBlogPostPayload body) {
+        BlogPost blogPost = new BlogPost();
+        blogPost.setCategory(body.getCategory());
+        blogPost.setContent(body.getContent());
+        blogPost.setTitle(body.getTitle());
+        blogPost.setCover(body.getCover());
+        blogPost.setReadTime(body.getReadTime());
+
+        if(body.getAuthor() != null) {
+            blogPost.setAuthor(authorService.findById(body.getAuthor()));
+        }
+
+        return blogPostDAO.save(blogPost);
     }
 
     public BlogPost findById(Long id) {
-        BlogPost found = null;
-        for(BlogPost post: this.blogPosts) {
-            if(post.getId() == id) {
-                found = post;
-            }
-        }
-        if (found == null)
-            throw new NotFoundException(id);
-        return found;
-
+        return blogPostDAO.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
     public void findByIdAndDelete(Long id) {
-        Iterator<BlogPost> blogPostIterator = this.blogPosts.iterator();
-        while (blogPostIterator.hasNext()) {
-            BlogPost current = blogPostIterator.next();
-            if(current.getId() == id) {
-                blogPostIterator.remove();
-            }
-        }
+        BlogPost found = this.findById(id);
+        blogPostDAO.delete(found);
     }
 
-    public BlogPost findByIdAndUpdate(Long id, BlogPost body) {
-        BlogPost found = null;
-        for (BlogPost post: this.blogPosts) {
-            if(post.getId() == id) {
-                found = post;
-                found.setId(id);
-                found.setCategory(body.getCategory());
-                found.setTitle(body.getTitle());
-                found.setCover(body.getCover());
-                found.setReadTime(body.getReadTime());
-                found.setContent(body.getContent());
-            }
+    public BlogPost findByIdAndUpdate(Long id, NewBlogPostPayload body) {
+        BlogPost found = this.findById(id);
+        found.setCategory(body.getCategory());
+        found.setContent(body.getContent());
+        found.setTitle(body.getTitle());
+        found.setCover(body.getCover());
+        found.setReadTime(body.getReadTime());
+
+        if(body.getAuthor() != null) {
+            found.setAuthor(authorService.findById(body.getAuthor()));
         }
-        if(found == null)
-            throw new NotFoundException(id);
-        return found;
+
+        return blogPostDAO.save(found);
     }
 }

@@ -15,7 +15,7 @@ import java.util.Random;
 public class Author {
     @Id
     @GeneratedValue
-//    @Setter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private long id;
     private String firstName;
     private String lastName;
