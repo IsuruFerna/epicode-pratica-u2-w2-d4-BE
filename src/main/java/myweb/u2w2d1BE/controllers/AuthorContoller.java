@@ -1,9 +1,14 @@
 package myweb.u2w2d1BE.controllers;
 
 import myweb.u2w2d1BE.entities.Author;
+import myweb.u2w2d1BE.exceptions.BadRequestExeption;
+import myweb.u2w2d1BE.payload.users.NewAuthorDTO;
+import myweb.u2w2d1BE.payload.users.NewAuthorResponseDTO;
 import myweb.u2w2d1BE.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +26,20 @@ public class AuthorContoller {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Author saveBlogPost(@RequestBody Author body) {
-        return authorService.save(body);
+    public NewAuthorResponseDTO saveBlogPost(@RequestBody @Validated NewAuthorDTO authorPayload, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new BadRequestExeption("There are erros in payload!");
+        } else  {
+
+            Author author = new Author();
+            author.setAvatar(authorPayload.avatar());
+            author.setEmail(authorPayload.avatar());
+            author.setLastName(authorPayload.lastName());
+            author.setFirstName(authorPayload.firstName());
+            author.setBirthDay(authorPayload.birthDay());
+            authorService.save(author);
+            return new NewAuthorResponseDTO(author.getId());
+        }
     }
 
     @GetMapping("/{id}")

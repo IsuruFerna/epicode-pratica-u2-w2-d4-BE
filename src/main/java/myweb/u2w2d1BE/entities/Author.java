@@ -34,6 +34,14 @@ public class Author {
         this.birthDay = LocalDate.parse(birthDay);
     }
 
+    public void setBirthDay(String birthDay) {
+        this.birthDay = LocalDate.parse(birthDay);
+    }
+
+    public String getBirthDay() {
+        return birthDay.toString();
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Author{");
