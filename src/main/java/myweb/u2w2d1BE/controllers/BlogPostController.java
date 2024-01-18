@@ -1,6 +1,7 @@
 package myweb.u2w2d1BE.controllers;
 
 import myweb.u2w2d1BE.entities.BlogPost;
+import myweb.u2w2d1BE.exceptions.BadRequestException;
 import myweb.u2w2d1BE.payload.blogPosts.BlogPostDTO;
 import myweb.u2w2d1BE.payload.NewBlogPostPayload;
 import myweb.u2w2d1BE.payload.blogPosts.NewBlogPostResponseDTO;
@@ -29,13 +30,10 @@ public class BlogPostController {
     @ResponseStatus(HttpStatus.CREATED)
     public NewBlogPostResponseDTO saveBlogPost(@RequestBody @Validated BlogPostDTO newBlogPostPayload, BindingResult validation) {
         if(validation.hasErrors()) {
-            System.out.println(validation.getAllErrors());
-//            throw new BadRequestException("there are errors in payload!");
-        } else {
-            BlogPost blogPost =  blogPostService.save(newBlogPostPayload);
-            return new NewBlogPostResponseDTO(blogPost.getId());
+            throw new BadRequestException(validation.getAllErrors());
         }
-
+        BlogPost blogPost =  blogPostService.save(newBlogPostPayload);
+        return new NewBlogPostResponseDTO(blogPost.getId());
     }
 
     @GetMapping("/{id}")

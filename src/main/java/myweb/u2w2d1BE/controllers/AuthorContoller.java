@@ -1,7 +1,7 @@
 package myweb.u2w2d1BE.controllers;
 
 import myweb.u2w2d1BE.entities.Author;
-import myweb.u2w2d1BE.exceptions.BadRequestExeption;
+import myweb.u2w2d1BE.exceptions.BadRequestException;
 import myweb.u2w2d1BE.payload.users.NewAuthorDTO;
 import myweb.u2w2d1BE.payload.users.NewAuthorResponseDTO;
 import myweb.u2w2d1BE.services.AuthorService;
@@ -28,7 +28,7 @@ public class AuthorContoller {
     @ResponseStatus(HttpStatus.CREATED)
     public NewAuthorResponseDTO saveBlogPost(@RequestBody @Validated NewAuthorDTO authorPayload, BindingResult validation) {
         if (validation.hasErrors()) {
-            throw new BadRequestExeption("There are erros in payload!");
+            throw new BadRequestException("There are erros in payload!");
         } else  {
 
             Author author = new Author();
