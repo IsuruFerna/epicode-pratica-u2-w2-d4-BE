@@ -14,7 +14,7 @@ import java.util.Stack;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BlogPost {
     @Id
     @GeneratedValue

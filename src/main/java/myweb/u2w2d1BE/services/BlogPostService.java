@@ -1,9 +1,8 @@
 package myweb.u2w2d1BE.services;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import myweb.u2w2d1BE.entities.Author;
 import myweb.u2w2d1BE.entities.BlogPost;
 import myweb.u2w2d1BE.exceptions.NotFoundException;
+import myweb.u2w2d1BE.payload.blogPosts.BlogPostDTO;
 import myweb.u2w2d1BE.payload.NewBlogPostPayload;
 import myweb.u2w2d1BE.repositories.BlogPostDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.net.UnknownServiceException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 @Service
 public class BlogPostService {
@@ -34,16 +27,16 @@ public class BlogPostService {
         return blogPostDAO.findAll(pageable);
     }
 
-    public BlogPost save(NewBlogPostPayload body) {
+    public BlogPost save(BlogPostDTO body) {
         BlogPost blogPost = new BlogPost();
-        blogPost.setCategory(body.getCategory());
-        blogPost.setContent(body.getContent());
-        blogPost.setTitle(body.getTitle());
-        blogPost.setCover(body.getCover());
-        blogPost.setReadTime(body.getReadTime());
+        blogPost.setCategory(body.category());
+        blogPost.setContent(body.content());
+        blogPost.setTitle(body.title());
+        blogPost.setCover(body.cover());
+        blogPost.setReadTime(body.readTime());
 
-        if(body.getAuthor() != null) {
-            blogPost.setAuthor(authorService.findById(body.getAuthor()));
+        if(body.author() != null) {
+            blogPost.setAuthor(authorService.findById(body.author()));
         }
 
         return blogPostDAO.save(blogPost);
