@@ -1,5 +1,6 @@
 package myweb.u2w2d1BE.services;
 
+import myweb.u2w2d1BE.config.MailgunSender;
 import myweb.u2w2d1BE.entities.Author;
 import myweb.u2w2d1BE.entities.BlogPost;
 import myweb.u2w2d1BE.exceptions.NotFoundException;
@@ -17,6 +18,9 @@ public class AuthorService {
 
     @Autowired
     private AuthorDAO authorDAO;
+
+
+
     private List<Author> authors = new ArrayList<>();
 
     public List<Author> getBlogPosts() {

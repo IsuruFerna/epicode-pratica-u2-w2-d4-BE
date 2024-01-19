@@ -1,5 +1,6 @@
 package myweb.u2w2d1BE.controllers;
 
+import myweb.u2w2d1BE.config.MailgunSender;
 import myweb.u2w2d1BE.entities.Author;
 import myweb.u2w2d1BE.exceptions.BadRequestException;
 import myweb.u2w2d1BE.payload.users.NewAuthorDTO;
@@ -19,6 +20,9 @@ public class AuthorContoller {
     @Autowired
     AuthorService authorService;
 
+    @Autowired
+    private MailgunSender mailgunSender;
+
     @GetMapping
     public List<Author> getBlogPosts() {
         return authorService.getBlogPosts();
@@ -28,7 +32,7 @@ public class AuthorContoller {
     @ResponseStatus(HttpStatus.CREATED)
     public NewAuthorResponseDTO saveBlogPost(@RequestBody @Validated NewAuthorDTO authorPayload, BindingResult validation) {
         if (validation.hasErrors()) {
-            throw new BadRequestException("There are erros in payload!");
+            throw new BadRequestException("There are errors in payload!");
         } else  {
 
             Author author = new Author();
@@ -37,6 +41,7 @@ public class AuthorContoller {
             author.setLastName(authorPayload.lastName());
             author.setFirstName(authorPayload.firstName());
             author.setBirthDay(authorPayload.birthDay());
+            mailgunSender.sendRegistrationEmail(author);
             authorService.save(author);
             return new NewAuthorResponseDTO(author.getId());
         }
