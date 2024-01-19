@@ -1,5 +1,7 @@
 package myweb.u2w2d1BE.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import myweb.u2w2d1BE.entities.BlogPost;
 import myweb.u2w2d1BE.exceptions.NotFoundException;
 import myweb.u2w2d1BE.payload.blogPosts.BlogPostDTO;
@@ -11,6 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 public class BlogPostService {
@@ -20,6 +25,9 @@ public class BlogPostService {
 
     @Autowired
     private AuthorService authorService;
+
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
     public Page<BlogPost> getBlogPosts(int page, int size, String orderBy) {
         if(size >= 100) size = 100;
@@ -63,6 +71,13 @@ public class BlogPostService {
             found.setAuthor(authorService.findById(body.getAuthor()));
         }
 
+        return blogPostDAO.save(found);
+    }
+
+    public BlogPost uploadCover(Long id, MultipartFile file) throws IOException {
+        BlogPost found = this.findById(id);
+        String coverURL = (String) cloudinaryUploader.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+        found.setCover(coverURL);
         return blogPostDAO.save(found);
     }
 }

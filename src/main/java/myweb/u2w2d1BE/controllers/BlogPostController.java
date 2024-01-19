@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/blogPosts")
@@ -50,5 +53,14 @@ public class BlogPostController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable Long id) {
         this.blogPostService.findByIdAndDelete(id);
+    }
+
+    @PatchMapping("/{blogPostID}/cover")
+    public BlogPost uploadCover(@RequestParam("cover")MultipartFile file, @PathVariable Long blogPostID) {
+        try {
+            return blogPostService.uploadCover(blogPostID, file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
